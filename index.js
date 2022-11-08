@@ -133,7 +133,11 @@ export default class Delatin {
 
                     // compute z using barycentric coordinates
                     const z = z0 * w0 + z1 * w1 + z2 * w2;
-                    const dz = Math.abs(z - this.heightAt(x, y));
+                    let dz = Math.abs(z - this.heightAt(x, y));
+                    // if point has an error and is border pixel penalize it
+                    if (dz !== 0 && (x === 0 || y === 0 || x === this.width - 1 || y === this.height - 1)) {
+                        dz = 999999;
+                    }
                     rms += dz * dz;
                     if (dz > maxError) {
                         maxError = dz;
